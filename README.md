@@ -59,3 +59,16 @@ curl http://localhost:8080/products/1
 - This project uses `github.com/golang-jwt/jwt/v5` for token creation/verification.
 - The current implementation uses hardcoded secrets and simple in-memory data; do not use as-is in production.
 
+## Docker image
+
+A prebuilt Docker image is available on Docker Hub as `finnmnsr/devops-lecture:latest`.
+
+Pull and run the image locally:
+
+```bash
+docker pull finnmnsr/devops-lecture:latest
+docker run -p 8080:8080 finnmnsr/devops-lecture:latest
+```
+
+The container exposes the same endpoints described above on port `8080`.
+

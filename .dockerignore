@@ -1,0 +1,40 @@
+
+# Binaries
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Build and test output
+build/
+dist/
+*.test
+*.out
+
+# Vendor and dependency directories
+vendor/
+Godeps/
+
+# Git
+.git
+.gitignore
+
+# Editor/IDE
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+
+# Logs
+*.log
+

@@ -6,11 +6,11 @@ type Product struct {
     Price float64 `json:"price"`
 }
 
-// Static data for three products
+// Static data for three model sportscar products
 var Products = []Product{
-    {ID: 1, Name: "Product 1", Price: 19.99},
-    {ID: 2, Name: "Product 2", Price: 29.99},
-    {ID: 3, Name: "Product 3", Price: 39.99},
+    {ID: 1, Name: "AMG GT 63 S 1:18", Price: 49.99},
+    {ID: 2, Name: "Porsche 992.1 GT3 1:18", Price: 79.99},
+    {ID: 3, Name: "Fiat Multipla 1:18", Price: 59.99},
 }
 
 // FindByID returns a pointer to the product with the given id or nil if not found

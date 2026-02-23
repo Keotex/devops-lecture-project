@@ -1,4 +1,4 @@
-module github.com/robinlieb/devops-lecture-project-2026
+module github.com/Keotex/devops-lecture-project
 
 go 1.25.7
 

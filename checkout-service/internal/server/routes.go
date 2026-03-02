@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Keotex/devops-lecture-project/checkout-service/pkg/token"
+	"github.com/Keotex/devops-lecture-project/shared/pkg/token"
 )
 
 func checkoutPlaceOrderHandler(w http.ResponseWriter, r *http.Request) {

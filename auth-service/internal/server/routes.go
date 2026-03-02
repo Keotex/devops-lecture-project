@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Keotex/devops-lecture-project/auth-service/pkg/token"
+	"github.com/Keotex/devops-lecture-project/shared/pkg/token"
 )
 
 func authLoginHandler(w http.ResponseWriter, r *http.Request) {

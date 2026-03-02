@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Keotex/devops-lecture-project/checkout-service/pkg/token"
+	"github.com/Keotex/devops-lecture-project/shared/pkg/token"
 )
 
 func TestCheckoutPlaceOrderHandler_Success(t *testing.T) {

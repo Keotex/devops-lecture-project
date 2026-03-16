@@ -96,6 +96,29 @@ Images are built and pushed automatically via the CD pipeline when a version tag
 - **CI** (`.github/workflows/go.yml`): Builds and tests all services on every push and pull request to `main`.
 - **CD** (`.github/workflows/publish.yml`): Builds and pushes Docker images to Docker Hub on version tags.
 
+## Kubernetes
+
+Deploy all services to a Kubernetes cluster:
+
+```bash
+# Deploy all services
+kubectl apply -f k8s/
+
+# Check deployment status
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# View logs
+kubectl logs -f deployment/auth-service
+
+# Access services locally (port forwarding)
+kubectl port-forward service/auth-service 8080:8080
+
+# Clean up
+kubectl delete -f k8s/
+```
+
 ## Notes
 
 - Uses `github.com/golang-jwt/jwt/v5` for token creation/verification.

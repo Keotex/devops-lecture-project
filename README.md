@@ -115,10 +115,31 @@ kubectl logs -f deployment/auth-service
 # Access services locally (port forwarding)
 kubectl port-forward service/auth-service 8080:8080
 
+# Find Grafana Service
+kubectl get svc -n observability | grep grafana
+
+# Access services locally (port forwarding)
+kubectl port-forward -n observability svc/lgtm-grafana 3000:80
+
 # Clean up
 kubectl delete -f k8s/
 ```
 
+## Passwords
+
+Find Passwords for ArgoCD and Grafana
+
+```bash
+# ArgoCD (Username: admin)
+# Password (Initial-Passwort)
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 --decode; echo
+
+# Grafana (Username: admin)
+# Password
+kubectl get secret -n observability lgtm-grafana \
+  -o jsonpath="{.data.admin-password}" | base64 --decode; echo
+```
 ## Notes
 
 - Uses `github.com/golang-jwt/jwt/v5` for token creation/verification.

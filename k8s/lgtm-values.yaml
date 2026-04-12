@@ -1,0 +1,17 @@
+tempo:
+  replicas: 2
+
+grafana:
+  additionalDataSources:
+    - name: Loki-Secondary
+      type: loki
+      access: proxy
+      url: http://lgtm-loki.observability.svc.cluster.local:3100
+      isDefault: false
+
+  dashboards:
+    default:
+      cluster-cpu:
+        gnetId: 315
+        revision: 3
+        datasource: Prometheus

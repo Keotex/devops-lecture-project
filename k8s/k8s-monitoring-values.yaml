@@ -1,0 +1,24 @@
+cluster:
+  name: local-cluster
+
+destinations:
+  mimir:
+    type: prometheus
+    url: http://lgtm-mimir-nginx.observability.svc.cluster.local/api/v1/push
+
+clusterMetrics:
+  enabled: true
+  destinations:
+    - mimir
+
+telemetryServices:
+  kube-state-metrics:
+    deploy: true
+  node-exporter:
+    deploy: true
+
+collectors:
+  alloy-metrics:
+    presets:
+      - clustered
+      - statefulset

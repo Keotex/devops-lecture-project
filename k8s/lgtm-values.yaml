@@ -1,17 +1,140 @@
 tempo:
-  replicas: 2
+  ingester:
+    replicas: 2
 
 grafana:
-  additionalDataSources:
-    - name: Loki-Secondary
-      type: loki
-      access: proxy
-      url: http://lgtm-loki.observability.svc.cluster.local:3100
-      isDefault: false
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Loki
+          uid: loki
+          type: loki
+          url: http://{{ .Release.Name }}-loki-gateway
+          isDefault: false
+        - name: Mimir
+          uid: prom
+          type: prometheus
+          url: http://{{ .Release.Name }}-mimir-nginx/prometheus
+          isDefault: true
+        - name: Tempo
+          uid: tempo
+          type: tempo
+          url: http://{{ .Release.Name }}-tempo-query-frontend:3200
+          isDefault: false
+          jsonData:
+            tracesToLogsV2:
+              datasourceUid: loki
+            lokiSearch:
+              datasourceUid: loki
+            tracesToMetrics:
+              datasourceUid: prom
+            serviceMap:
+              datasourceUid: prom
+        - name: Loki-Secondary
+          uid: loki-secondary
+          type: loki
+          access: proxy
+          url: http://{{ .Release.Name }}-loki-gateway
+          isDefault: false
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
 
   dashboards:
     default:
       cluster-cpu:
-        gnetId: 315
-        revision: 3
-        datasource: Mimir
+        json: |
+          {
+            "annotations": {
+              "list": [
+                {
+                  "builtIn": 1,
+                  "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                  },
+                  "enable": true,
+                  "hide": true,
+                  "iconColor": "rgba(0, 211, 255, 1)",
+                  "name": "Annotations & Alerts",
+                  "type": "dashboard"
+                }
+              ]
+            },
+            "editable": true,
+            "panels": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prom"
+                },
+                "fieldConfig": {
+                  "defaults": {
+                    "unit": "percentunit",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "overrides": []
+                },
+                "gridPos": {
+                  "h": 8,
+                  "w": 24,
+                  "x": 0,
+                  "y": 0
+                },
+                "id": 1,
+                "options": {
+                  "reduceOptions": {
+                    "calcs": [
+                      "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                  },
+                  "orientation": "auto",
+                  "textMode": "auto",
+                  "colorMode": "value",
+                  "graphMode": "area",
+                  "justifyMode": "auto"
+                },
+                "targets": [
+                  {
+                    "expr": "sum(rate(container_cpu_usage_seconds_total{container!\"\"}[5m]))",
+                    "legendFormat": "cluster",
+                    "refId": "A"
+                  }
+                ],
+                "title": "Cluster CPU Usage",
+                "type": "stat"
+              }
+            ],
+            "refresh": "30s",
+            "schemaVersion": 39,
+            "style": "dark",
+            "tags": [
+              "kubernetes",
+              "cpu"
+            ],
+            "templating": {
+              "list": []
+            },
+            "time": {
+              "from": "now-15m",
+              "to": "now"
+            },
+            "timepicker": {},
+            "timezone": "",
+            "title": "Cluster CPU Overview",
+            "version": 1
+          }

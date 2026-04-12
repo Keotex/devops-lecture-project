@@ -14,4 +14,4 @@ grafana:
       cluster-cpu:
         gnetId: 315
         revision: 3
-        datasource: Prometheus
+        datasource: Mimir

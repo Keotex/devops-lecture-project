@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lgtm-stack
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  sources:
+    - repoURL: https://grafana.github.io/helm-charts
+      chart: lgtm-distributed
+      targetRevision: "3.0.1"
+      helm:
+        releaseName: lgtm
+        valueFiles:
+          - $values/k8s/lgtm-values.yaml
+    - repoURL: https://github.com/Keotex/devops-lecture-project.git
+      targetRevision: main
+      ref: values
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

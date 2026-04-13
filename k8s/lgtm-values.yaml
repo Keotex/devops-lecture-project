@@ -81,9 +81,9 @@ grafana:
                 },
                 "fieldConfig": {
                   "defaults": {
-                    "unit": "percent",
+                    "unit": "cores",
                     "min": 0,
-                    "max": 100
+                    "max": 32
                   },
                   "overrides": []
                 },
@@ -110,7 +110,7 @@ grafana:
                 },
                 "targets": [
                   {
-                    "expr": "100 * sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) / sum(machine_cpu_cores)",
+                    "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) or sum(rate(node_cpu_usage_seconds_total[5m])) or sum(rate(container_cpu_usage_seconds_total{container!\"\"}[5m]))",
                     "legendFormat": "cluster",
                     "refId": "A"
                   }

@@ -11,6 +11,11 @@ clusterMetrics:
   destinations:
     - mimir
 
+hostMetrics:
+  enabled: true
+  destinations:
+    - mimir
+
 telemetryServices:
   kube-state-metrics:
     deploy: true

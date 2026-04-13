@@ -113,7 +113,8 @@ kubectl get services
 kubectl logs -f deployment/auth-service
 
 # Access services locally (port forwarding)
-kubectl port-forward service/auth-service 8080:8080
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+#kubectl port-forward service/auth-service 8080:8080
 
 # Find Grafana Service
 kubectl get svc -n observability | grep grafana

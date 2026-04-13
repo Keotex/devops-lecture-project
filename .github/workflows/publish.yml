@@ -40,30 +40,27 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.service.outputs.service }}:latest
 
       - name: Generate SBOM with Syft
-        uses: anchore/sbom-action@v0
-        with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.service.outputs.service }}:${{ steps.service.outputs.version }}
-          format: cyclonedx-json
-          output-file: sbom.cdx.json
+        env:
+          IMAGE_REF: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.service.outputs.service }}:${{ steps.service.outputs.version }}
+        run: docker run --rm anchore/syft:latest "$IMAGE_REF" -o cyclonedx-json > sbom.cdx.json
 
       - name: Scan SBOM with Grype
-        uses: anchore/scan-action@v6
-        with:
-          sbom: sbom.cdx.json
-          fail-build: true
-          severity-cutoff: high
+        run: |
+          docker run --rm -v "$PWD:/work" anchore/grype:latest "sbom:/work/sbom.cdx.json" -o sarif > results.sarif
+          docker run --rm -v "$PWD:/work" anchore/grype:latest "sbom:/work/sbom.cdx.json" --fail-on high
 
       - name: Upload SBOM and scan results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sbom-and-security-scan
+          if-no-files-found: warn
           path: |
             sbom.cdx.json
             results.sarif
 
       - name: Upload Grype SARIF to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        if: ${{ always() && hashFiles('results.sarif') != '' }}
         with:
           sarif_file: results.sarif

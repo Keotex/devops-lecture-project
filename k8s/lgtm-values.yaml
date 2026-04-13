@@ -110,7 +110,9 @@ grafana:
                 },
                 "targets": [
                   {
-                    "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) or sum(rate(node_cpu_usage_seconds_total[5m])) or sum(rate(container_cpu_usage_seconds_total{container!\"\"}[5m]))",
+                    "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) or sum(rate(node_cpu_usage_seconds_total[5m]))",
+                    "instant": true,
+                    "range": false,
                     "legendFormat": "cluster",
                     "refId": "A"
                   }
@@ -136,5 +138,5 @@ grafana:
             "timepicker": {},
             "timezone": "",
             "title": "Cluster CPU Overview",
-            "version": 1
+            "version": 2
           }
